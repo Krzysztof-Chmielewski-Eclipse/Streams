@@ -1,7 +1,8 @@
 package uk.co.eclipsegroup.brewery;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Bar {
     private final SellingRecord sellingRecord;
@@ -10,37 +11,29 @@ public class Bar {
         this.sellingRecord = sellingRecord;
     }
 
-    public Map<Beer, BeerRecord> getBeersStatistics() {
+    public Set<BeerRecord> getBeersStatistics() {
         var beers = setupBeersStatistics();
         updateCountAndPriceOf(beers);
-        removeNonAlcoholicBeersFrom(beers);
-
-        return beers;
+        return removeNonAlcoholicBeersFrom(beers);
     }
 
-    private Map<Beer, BeerRecord> setupBeersStatistics() {
-        var beers = new HashMap<Beer, BeerRecord>();
+    private Set<BeerRecord> setupBeersStatistics() {
+        var beers = new HashSet<BeerRecord>();
         for (Beer soldBeer : sellingRecord.menu()) {
-            beers.put(soldBeer, new BeerRecord(soldBeer.getName()));
+            beers.add(new BeerRecord(soldBeer.getName(), soldBeer.isAlcoholic()));
         }
         return beers;
     }
 
-    private void updateCountAndPriceOf(Map<Beer, BeerRecord> beers) {
+    private void updateCountAndPriceOf(Set<BeerRecord> beers) {
         for (Beer soldBeer : sellingRecord.soldBeers()) {
-            var beerRecord = beers.get(soldBeer);
+            var beerRecord = beers.stream().filter(beer -> beer.getName().equals(soldBeer.getName())).findFirst().get();
             beerRecord.setCount(beerRecord.getCount() + 1);
             beerRecord.setPrice(beerRecord.getPrice() + soldBeer.getPrice());
         }
     }
 
-    private void removeNonAlcoholicBeersFrom(Map<Beer, BeerRecord> beers) {
-        var iterator = beers.entrySet().iterator();
-        while (iterator.hasNext()) {
-            var next = iterator.next();
-            if (!next.getKey().isAlcoholic()) {
-                iterator.remove();
-            }
-        }
+    private Set<BeerRecord> removeNonAlcoholicBeersFrom(Set<BeerRecord> beers) {
+        return beers.stream().filter(BeerRecord::isAlcoholic).collect(Collectors.toSet());
     }
 }
