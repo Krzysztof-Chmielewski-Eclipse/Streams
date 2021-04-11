@@ -19,15 +19,13 @@ public class Bar {
 
     private Map<Beer, BeerRecord> setupStatistics() {
         return sellingRecord.menu().stream()
-                .collect(Collectors.toMap(beer -> beer, beer -> new BeerRecord(beer.getName())));
+                .collect(Collectors.toMap(beer -> beer, BeerRecord::new));
     }
 
     private void updateCountAndPrice(Map<Beer, BeerRecord> result) {
-        for (Beer soldBeer : sellingRecord.soldBeers()) {
-            var beerRecord = result.get(soldBeer);
-            beerRecord.setCount(beerRecord.getCount() + 1);
-            beerRecord.setPrice(beerRecord.getPrice() + soldBeer.getPrice());
-        }
+        sellingRecord.soldBeers().stream()
+                .map(result::get)
+                .forEach(BeerRecord::addOne);
     }
 
     private void removeNonAlcoholic(Map<Beer, BeerRecord> result) {

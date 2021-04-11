@@ -1,16 +1,16 @@
 package uk.co.eclipsegroup.brewery;
 
 public class BeerRecord {
-    private final String name;
+    private final Beer beer;
     private int count;
     private float price;
 
-    public BeerRecord(String name) {
-        this.name = name;
+    public BeerRecord(Beer beer) {
+        this.beer = beer;
     }
 
-    public String getName() {
-        return name;
+    public Beer getBeer() {
+        return beer;
     }
 
     public int getCount() {
@@ -29,10 +29,15 @@ public class BeerRecord {
         this.price = price;
     }
 
+    public void addOne() {
+        count++;
+        price += beer.getPrice();
+    }
+
     @Override
     public String toString() {
         return "BeerRecord{" +
-                "name='" + name + '\'' +
+                "beer='" + beer.getName() + '\'' +
                 ", count=" + count +
                 ", price=" + price +
                 '}';
