@@ -13,6 +13,13 @@ public class Bar {
     }
 
     public Map<Beer, List<Object>> getBeersStatistics() {
+        var result = setupStatistics();
+        updateCountAndPrice(result);
+        removeNonAlcoholic(result);
+        return result;
+    }
+
+    private Map<Beer, List<Object>> setupStatistics() {
         var result = new HashMap<Beer, List<Object>>();
         for (Beer soldBeer : sellingRecord.menu()) {
             var list = new ArrayList<>();
@@ -21,13 +28,18 @@ public class Bar {
             list.add(0);
             list.add(0f);
         }
+        return result;
+    }
 
+    private void updateCountAndPrice(Map<Beer, List<Object>> result) {
         for (Beer soldBeer : sellingRecord.soldBeers()) {
             var statistics = result.get(soldBeer);
             statistics.set(1, (Integer) statistics.get(1) + 1);
             statistics.set(2, (Float) statistics.get(2) + soldBeer.getPrice());
         }
+    }
 
+    private void removeNonAlcoholic(Map<Beer, List<Object>> result) {
         var iterator = result.entrySet().iterator();
         while (iterator.hasNext()) {
             var next = iterator.next();
@@ -35,6 +47,5 @@ public class Bar {
                 iterator.remove();
             }
         }
-        return result;
     }
 }
