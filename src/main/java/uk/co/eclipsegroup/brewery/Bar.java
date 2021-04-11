@@ -40,12 +40,6 @@ public class Bar {
     }
 
     private void removeNonAlcoholic(Map<Beer, List<Object>> result) {
-        var iterator = result.entrySet().iterator();
-        while (iterator.hasNext()) {
-            var next = iterator.next();
-            if (!next.getKey().isAlcoholic()) {
-                iterator.remove();
-            }
-        }
+        result.entrySet().removeIf(entry -> !entry.getKey().isAlcoholic());
     }
 }

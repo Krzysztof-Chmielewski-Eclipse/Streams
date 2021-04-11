@@ -1,10 +1,10 @@
 package uk.co.eclipsegroup.brewery;
 
 class Beer {
-    private String name;
-    private boolean alcoholic;
-    private int ibu;
-    private float price;
+    private final String name;
+    private final boolean alcoholic;
+    private final int ibu;
+    private final float price;
 
     public Beer(String name, boolean alcoholic, int ibu, float price) {
         this.name = name;
