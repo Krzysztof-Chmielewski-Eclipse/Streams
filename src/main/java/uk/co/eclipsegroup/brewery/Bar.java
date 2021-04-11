@@ -1,7 +1,7 @@
 package uk.co.eclipsegroup.brewery;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Bar {
     private final SellingRecord sellingRecord;
@@ -18,11 +18,8 @@ public class Bar {
     }
 
     private Map<Beer, BeerRecord> setupStatistics() {
-        var result = new HashMap<Beer, BeerRecord>();
-        for (Beer soldBeer : sellingRecord.menu()) {
-            result.put(soldBeer, new BeerRecord(soldBeer.getName()));
-        }
-        return result;
+        return sellingRecord.menu().stream()
+                .collect(Collectors.toMap(beer -> beer, beer -> new BeerRecord(beer.getName())));
     }
 
     private void updateCountAndPrice(Map<Beer, BeerRecord> result) {
