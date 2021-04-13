@@ -39,12 +39,6 @@ public class Bar {
     }
 
     private void removeNonAlcoholicBeers(HashMap<Beer, List<Object>> result) {
-        var iterator = result.entrySet().iterator();
-        while (iterator.hasNext()) {
-            var next = iterator.next();
-            if (!next.getKey().isAlcoholic()) {
-                iterator.remove();
-            }
-        }
+        result.entrySet().removeIf(b -> !b.getKey().isAlcoholic());
     }
 }
