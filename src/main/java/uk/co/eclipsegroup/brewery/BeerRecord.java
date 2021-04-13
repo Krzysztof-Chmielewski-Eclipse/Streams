@@ -1,40 +1,37 @@
 package uk.co.eclipsegroup.brewery;
 
 public class BeerRecord {
-    private final String name;
+    private final Beer beer;
     private int count;
     private float price;
 
-    public BeerRecord(String name) {
-        this.name = name;
+    public BeerRecord(Beer beer) {
+        this.beer = beer;
     }
 
-    public String getName() {
-        return name;
+    public Beer getBeer() {
+        return beer;
     }
 
     public int getCount() {
         return count;
     }
 
-    public void setCount(int count) {
-        this.count = count;
-    }
-
     public float getPrice() {
         return price;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
     }
 
     @Override
     public String toString() {
         return "BeerRecord{" +
-                "name='" + name + '\'' +
+                "name='" + beer.getName() + '\'' +
                 ", count=" + count +
                 ", price=" + price +
                 '}';
+    }
+
+    public void addOne() {
+        count = count + 1;
+        price = count * beer.getPrice();
     }
 }
