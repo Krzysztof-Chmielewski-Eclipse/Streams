@@ -1,6 +1,6 @@
 package uk.co.eclipsegroup.brewery;
 
-import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Bar {
@@ -10,22 +10,12 @@ public class Bar {
         this.sellingRecord = sellingRecord;
     }
 
-    public Map<Beer, BeerRecord> getBeersStatistics() {
-        var beerRecords = setupInitialStatistics();
-        updateCountAndPrice(beerRecords);
-        return beerRecords;
-    }
-
-    private Map<Beer, BeerRecord> setupInitialStatistics() {
-        return sellingRecord.menu().stream()
+    public Set<BeerRecord> getBeersStatistics() {
+        return sellingRecord.soldBeers().stream()
                 .filter(Beer::isAlcoholic)
-                .collect(Collectors.toMap(b -> b, BeerRecord::new));
-    }
-
-    private void updateCountAndPrice(Map<Beer, BeerRecord> result) {
-        sellingRecord.soldBeers().stream()
-                .filter(Beer::isAlcoholic)
-                .map(result::get)
-                .forEach(BeerRecord::addOne);
+                .collect(Collectors.groupingBy(b -> b, Collectors.counting()))
+                .entrySet().stream()
+                .map(e -> new BeerRecord(e.getKey(), e.getValue()))
+                .collect(Collectors.toSet());
     }
 }

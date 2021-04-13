@@ -1,23 +1,30 @@
 package uk.co.eclipsegroup.brewery;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class BeerRecord {
     private final Beer beer;
-    private int count;
-    private float price;
+    private final long count;
+    private final BigDecimal price;
 
-    public BeerRecord(Beer beer) {
+    public BeerRecord(Beer beer, Long count) {
         this.beer = beer;
+        this.count = count;
+        price = BigDecimal.valueOf(count)
+                .multiply(BigDecimal.valueOf(beer.getPrice()))
+                .setScale(2, RoundingMode.HALF_UP);
     }
 
     public Beer getBeer() {
         return beer;
     }
 
-    public int getCount() {
+    public long getCount() {
         return count;
     }
 
-    public float getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
@@ -28,10 +35,5 @@ public class BeerRecord {
                 ", count=" + count +
                 ", price=" + price +
                 '}';
-    }
-
-    public void addOne() {
-        count = count + 1;
-        price = count * beer.getPrice();
     }
 }
